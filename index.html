@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圏論パズル - 箱と矢印の冒険</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- ヘッダー -->
+        <header class="game-header">
+            <h1>🎮 圏論パズル - 箱と矢印の冒険</h1>
+            <div class="header-info">
+                <div class="level-info">
+                    <span class="badge">段 <span id="currentStage">0</span></span>
+                    <span class="badge">問題 <span id="currentProblem">1</span>/3</span>
+                </div>
+                <div class="score-info">
+                    <span class="badge">⭐ スコア: <span id="score">0</span></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="game-container">
+            <!-- 左サイドバー：説明とヒント -->
+            <aside class="sidebar-left">
+                <div class="info-panel">
+                    <h2>📚 今回のテーマ</h2>
+                    <p id="stageTitle" class="stage-title">箱と矢印で遊ぼう</p>
+                    <p id="stageDescription" class="stage-description">
+                        矢印を並べて、どの道を通っても同じ結果になるようにしよう！
+                    </p>
+                </div>
+
+                <div class="hint-panel">
+                    <h3>💡 ヒント</h3>
+                    <p id="hint" class="hint-text">
+                        上の道と下の道、どちらを通っても同じ場所に着くかな？
+                    </p>
+                </div>
+
+                <div class="concept-panel">
+                    <h3>🎯 学べること</h3>
+                    <div id="conceptList" class="concept-list">
+                        <div class="concept-item">✓ 矢印の合成（つなげる）</div>
+                        <div class="concept-item">✓ 可換図式（道が一致する）</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 中央：ゲームエリア -->
+            <section class="game-area">
+                <div class="problem-header">
+                    <h2 id="problemTitle">問題1: 矢印をつなげよう</h2>
+                    <button id="resetBtn" class="btn btn-secondary">🔄 リセット</button>
+                </div>
+
+                <!-- キャンバスエリア -->
+                <div class="canvas-container">
+                    <canvas id="gameCanvas" width="800" height="600"></canvas>
+                    <div id="canvasOverlay" class="canvas-overlay"></div>
+                </div>
+
+                <!-- コントロールパネル -->
+                <div class="control-panel">
+                    <button id="playBtn" class="btn btn-primary">▶️ 確認する</button>
+                    <button id="nextBtn" class="btn btn-success" style="display: none;">次の問題へ →</button>
+                </div>
+
+                <!-- フィードバックエリア -->
+                <div id="feedback" class="feedback-area" style="display: none;">
+                    <div class="feedback-content">
+                        <div class="feedback-icon" id="feedbackIcon">✓</div>
+                        <div class="feedback-text">
+                            <h3 id="feedbackTitle">素晴らしい！</h3>
+                            <p id="feedbackMessage">全ての道が正しくつながっています。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 右サイドバー：ツールボックス -->
+            <aside class="sidebar-right">
+                <div class="toolbox-panel">
+                    <h3>🔧 ツール</h3>
+                    <div class="tool-list">
+                        <button class="tool-btn active" data-tool="select">
+                            <span class="tool-icon">👆</span>
+                            <span class="tool-name">選択</span>
+                        </button>
+                        <button class="tool-btn" data-tool="arrow">
+                            <span class="tool-icon">➡️</span>
+                            <span class="tool-name">矢印</span>
+                        </button>
+                        <button class="tool-btn" data-tool="delete">
+                            <span class="tool-icon">🗑️</span>
+                            <span class="tool-name">削除</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="legend-panel">
+                    <h3>📖 記号の意味</h3>
+                    <div class="legend-list">
+                        <div class="legend-item">
+                            <div class="legend-symbol box">□</div>
+                            <div class="legend-text">箱（モノ）</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol arrow">→</div>
+                            <div class="legend-text">矢印（関係）</div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol path">⟿</div>
+                            <div class="legend-text">道（経路）</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-panel">
+                    <h3>📊 進捗</h3>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <p class="progress-text">
+                        <span id="solvedCount">0</span> / <span id="totalCount">9</span> 問クリア
+                    </p>
+                </div>
+            </aside>
+        </main>
+
+        <!-- モーダル：チュートリアル -->
+        <div id="tutorialModal" class="modal">
+            <div class="modal-content">
+                <h2>🎓 圏論パズルへようこそ！</h2>
+                <div class="tutorial-content">
+                    <p>このゲームでは、<strong>箱と矢印</strong>を使って考える力を身につけます。</p>
+
+                    <div class="tutorial-step">
+                        <h3>📦 箱（モノ）とは？</h3>
+                        <p>材料や料理、場所など、何か「モノ」を表します。</p>
+                        <div class="example">例: ハンバーグ、チーズハンバーグ</div>
+                    </div>
+
+                    <div class="tutorial-step">
+                        <h3>➡️ 矢印（関係）とは？</h3>
+                        <p>モノとモノの「つながり」や「変化」を表します。</p>
+                        <div class="example">例: チーズを乗せる、ソースをかける</div>
+                    </div>
+
+                    <div class="tutorial-step">
+                        <h3>🎯 ゴール</h3>
+                        <p>どの道を通っても<strong>同じ結果</strong>になるように矢印をつなげよう！</p>
+                    </div>
+                </div>
+                <button id="startBtn" class="btn btn-primary btn-large">ゲームを始める 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- スクリプト -->
+    <script src="js/graph.js"></script>
+    <script src="js/validator.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/problems.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
