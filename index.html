@@ -78,26 +78,42 @@
                             <p id="feedbackMessage">全ての道が正しくつながっています。</p>
                         </div>
                     </div>
+                    <!-- 学習ポイント -->
+                    <div id="learnedConcept" class="learned-concept" style="display: none;">
+                        <h4>📖 今学んだこと</h4>
+                        <div class="concept-box">
+                            <h5 id="conceptTitle"></h5>
+                            <p id="conceptExplanation"></p>
+                            <div class="concept-example">
+                                <strong>例：</strong>
+                                <p id="conceptExample"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- 右サイドバー：ツールボックス -->
             <aside class="sidebar-right">
                 <div class="toolbox-panel">
-                    <h3>🔧 ツール</h3>
-                    <div class="tool-list">
-                        <button class="tool-btn active" data-tool="select">
-                            <span class="tool-icon">👆</span>
-                            <span class="tool-name">選択</span>
-                        </button>
-                        <button class="tool-btn" data-tool="arrow">
-                            <span class="tool-icon">➡️</span>
-                            <span class="tool-name">矢印</span>
-                        </button>
-                        <button class="tool-btn" data-tool="delete">
-                            <span class="tool-icon">🗑️</span>
-                            <span class="tool-name">削除</span>
-                        </button>
+                    <h3>🔧 使い方</h3>
+                    <div class="instruction-list">
+                        <div class="instruction-item">
+                            <span class="instruction-number">1️⃣</span>
+                            <p>箱をクリックして選択</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-number">2️⃣</span>
+                            <p>次の箱をクリック</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-number">3️⃣</span>
+                            <p>矢印のラベルを入力</p>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-number">✅</span>
+                            <p>確認ボタンで答え合わせ</p>
+                        </div>
                     </div>
                 </div>
 

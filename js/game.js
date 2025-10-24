@@ -17,7 +17,7 @@ class CategoryGame {
         this.renderer = null;
 
         // インタラクション状態
-        this.selectedTool = 'select';
+        this.selectedTool = 'arrow'; // 常に矢印モード
         this.selectedObject = null;
         this.tempArrow = null;
         this.arrowIdCounter = 0;
@@ -42,13 +42,6 @@ class CategoryGame {
      * イベントリスナーの設定
      */
     setupEventListeners() {
-        // ツールボタン
-        document.querySelectorAll('.tool-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.selectTool(btn.dataset.tool);
-            });
-        });
-
         // キャンバスのイベント
         this.canvas.addEventListener('mousedown', (e) => this.handleCanvasMouseDown(e));
         this.canvas.addEventListener('mousemove', (e) => this.handleCanvasMouseMove(e));
@@ -63,19 +56,6 @@ class CategoryGame {
         document.getElementById('startBtn').addEventListener('click', () => {
             document.getElementById('tutorialModal').style.display = 'none';
         });
-    }
-
-    /**
-     * ツールを選択
-     */
-    selectTool(tool) {
-        this.selectedTool = tool;
-
-        document.querySelectorAll('.tool-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
     }
 
     /**
@@ -273,10 +253,16 @@ class CategoryGame {
             feedbackEl.classList.add('success');
             document.getElementById('feedbackIcon').textContent = '✓';
             document.getElementById('nextBtn').style.display = 'inline-block';
+
+            // 学習ポイントを表示
+            this.showLearnedConcept();
         } else {
             feedbackEl.classList.add('error');
             document.getElementById('feedbackIcon').textContent = '✗';
             document.getElementById('nextBtn').style.display = 'none';
+
+            // 学習ポイントを非表示
+            document.getElementById('learnedConcept').style.display = 'none';
         }
 
         document.getElementById('feedbackTitle').textContent = formatted.title;
@@ -287,6 +273,25 @@ class CategoryGame {
             const paths = result.pathComparisons[0].actualPaths || [];
             this.renderer.highlightPaths(paths);
         }
+    }
+
+    /**
+     * 学習ポイントを表示
+     */
+    showLearnedConcept() {
+        if (!this.currentProblem.learnedConcept) {
+            document.getElementById('learnedConcept').style.display = 'none';
+            return;
+        }
+
+        const concept = this.currentProblem.learnedConcept;
+        const conceptEl = document.getElementById('learnedConcept');
+
+        document.getElementById('conceptTitle').textContent = concept.title;
+        document.getElementById('conceptExplanation').textContent = concept.explanation;
+        document.getElementById('conceptExample').textContent = concept.example;
+
+        conceptEl.style.display = 'block';
     }
 
     /**
